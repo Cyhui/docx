@@ -1,5 +1,5 @@
 // http://www.datypic.com/sc/ooxml/e-m_func-1.html
-import { XmlComponent } from "file/xml-components";
+import { XmlComponent } from "@file/xml-components";
 
 import { MathComponent } from "../math-component";
 import { MathBase } from "../n-ary";
@@ -7,12 +7,12 @@ import { MathFunctionName } from "./math-function-name";
 import { MathFunctionProperties } from "./math-function-properties";
 
 export interface IMathFunctionOptions {
-    readonly children: MathComponent[];
-    readonly name: MathComponent[];
+    readonly children: readonly MathComponent[];
+    readonly name: readonly MathComponent[];
 }
 
 export class MathFunction extends XmlComponent {
-    constructor(options: IMathFunctionOptions) {
+    public constructor(options: IMathFunctionOptions) {
         super("m:func");
 
         this.root.push(new MathFunctionProperties());

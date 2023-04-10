@@ -1,4 +1,4 @@
-import { XmlAttributeComponent, XmlComponent } from "file/xml-components";
+import { XmlAttributeComponent, XmlComponent } from "@file/xml-components";
 
 // Currently, this is hard-coded for Microsoft word compatSettings.
 // Theoretically, we could add compatSettings for other programs, but
@@ -25,7 +25,7 @@ export class CompatibilitySettingAttributes extends XmlAttributeComponent<{
 // https://docs.microsoft.com/en-us/openspecs/office_standards/ms-docx/90138c4d-eb18-4edc-aa6c-dfb799cb1d0d
 
 export class CompatibilitySetting extends XmlComponent {
-    constructor(version: number) {
+    public constructor(version: number) {
         super("w:compatSetting");
 
         this.root.push(

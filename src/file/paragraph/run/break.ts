@@ -1,5 +1,5 @@
 // http://officeopenxml.com/WPtextSpecialContent-break.php
-import { XmlComponent } from "file/xml-components";
+import { XmlComponent } from "@file/xml-components";
 
 // <xsd:group name="EG_RunInnerContent">
 //   ...
@@ -26,7 +26,7 @@ import { XmlComponent } from "file/xml-components";
 // </xsd:restriction>
 // </xsd:simpleType>
 export class Break extends XmlComponent {
-    constructor() {
+    public constructor() {
         super("w:br");
     }
 }

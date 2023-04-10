@@ -1,6 +1,6 @@
 import { expect } from "chai";
 
-import { Formatter } from "export/formatter";
+import { Formatter } from "@export/formatter";
 
 import { TableOfContents } from "./table-of-contents";
 import { StyleLevel } from "./table-of-contents-properties";
@@ -14,9 +14,7 @@ describe("Table of Contents", () => {
         });
 
         it("should construct a TOC with all the options and alias", () => {
-            const styles = new Array<StyleLevel>();
-            styles.push(new StyleLevel("SL", 1));
-            styles.push(new StyleLevel("SL", 2));
+            const styles = [new StyleLevel("SL", 1), new StyleLevel("SL", 2)];
 
             const props = {
                 captionLabel: "A",

@@ -1,10 +1,12 @@
 import * as JSZip from "jszip";
 import * as xml from "xml";
 
-import { File } from "file";
+import { File } from "@file/file";
+
 import { Formatter } from "../formatter";
 import { ImageReplacer } from "./image-replacer";
 import { NumberingReplacer } from "./numbering-replacer";
+import { PrettifyType } from "./packer";
 
 interface IXmlifyedFile {
     readonly data: string;
@@ -18,16 +20,17 @@ interface IXmlifyedFileMapping {
     readonly Numbering: IXmlifyedFile;
     readonly Relationships: IXmlifyedFile;
     readonly FileRelationships: IXmlifyedFile;
-    readonly Headers: IXmlifyedFile[];
-    readonly Footers: IXmlifyedFile[];
-    readonly HeaderRelationships: IXmlifyedFile[];
-    readonly FooterRelationships: IXmlifyedFile[];
+    readonly Headers: readonly IXmlifyedFile[];
+    readonly Footers: readonly IXmlifyedFile[];
+    readonly HeaderRelationships: readonly IXmlifyedFile[];
+    readonly FooterRelationships: readonly IXmlifyedFile[];
     readonly ContentTypes: IXmlifyedFile;
     readonly CustomProperties: IXmlifyedFile;
     readonly AppProperties: IXmlifyedFile;
     readonly FootNotes: IXmlifyedFile;
     readonly FootNotesRelationships: IXmlifyedFile;
     readonly Settings: IXmlifyedFile;
+    readonly Comments?: IXmlifyedFile;
 }
 
 export class Compiler {
@@ -35,42 +38,42 @@ export class Compiler {
     private readonly imageReplacer: ImageReplacer;
     private readonly numberingReplacer: NumberingReplacer;
 
-    constructor() {
+    public constructor() {
         this.formatter = new Formatter();
         this.imageReplacer = new ImageReplacer();
         this.numberingReplacer = new NumberingReplacer();
     }
 
-    public compile(file: File, prettifyXml?: boolean): JSZip {
+    public compile(file: File, prettifyXml?: boolean | PrettifyType): JSZip {
         const zip = new JSZip();
         const xmlifiedFileMapping = this.xmlifyFile(file, prettifyXml);
-        const map = new Map<string, IXmlifyedFile | IXmlifyedFile[]>(Object.entries(xmlifiedFileMapping));
+        const map = new Map<string, IXmlifyedFile | readonly IXmlifyedFile[]>(Object.entries(xmlifiedFileMapping));
 
         for (const [, obj] of map) {
             if (Array.isArray(obj)) {
-                for (const subFile of obj) {
+                for (const subFile of obj as readonly IXmlifyedFile[]) {
                     zip.file(subFile.path, subFile.data);
                 }
             } else {
-                zip.file(obj.path, obj.data);
+                zip.file((obj as IXmlifyedFile).path, (obj as IXmlifyedFile).data);
             }
         }
 
-        for (const data of file.Media.Array) {
-            const mediaData = data.stream;
-            zip.file(`word/media/${data.fileName}`, mediaData);
+        for (const { stream, fileName } of file.Media.Array) {
+            zip.file(`word/media/${fileName}`, stream);
         }
 
         return zip;
     }
 
-    private xmlifyFile(file: File, prettify?: boolean): IXmlifyedFileMapping {
+    private xmlifyFile(file: File, prettify?: boolean | PrettifyType): IXmlifyedFileMapping {
         const documentRelationshipCount = file.Document.Relationships.RelationshipCount + 1;
 
         const documentXmlData = xml(
             this.formatter.format(file.Document.View, {
                 viewWrapper: file.Document,
                 file,
+                stack: [],
             }),
             {
                 indent: prettify,
@@ -97,6 +100,7 @@ export class Compiler {
                         this.formatter.format(file.Document.Relationships, {
                             viewWrapper: file.Document,
                             file,
+                            stack: [],
                         }),
                         {
                             indent: prettify,
@@ -112,7 +116,6 @@ export class Compiler {
                 data: (() => {
                     const xmlData = this.imageReplacer.replace(documentXmlData, documentMediaDatas, documentRelationshipCount);
                     const referenedXmlData = this.numberingReplacer.replace(xmlData, file.Numbering.ConcreteNumbering);
-
                     return referenedXmlData;
                 })(),
                 path: "word/document.xml",
@@ -123,6 +126,7 @@ export class Compiler {
                         this.formatter.format(file.Styles, {
                             viewWrapper: file.Document,
                             file,
+                            stack: [],
                         }),
                         {
                             indent: prettify,
@@ -142,6 +146,7 @@ export class Compiler {
                     this.formatter.format(file.CoreProperties, {
                         viewWrapper: file.Document,
                         file,
+                        stack: [],
                     }),
                     {
                         indent: prettify,
@@ -158,6 +163,7 @@ export class Compiler {
                     this.formatter.format(file.Numbering, {
                         viewWrapper: file.Document,
                         file,
+                        stack: [],
                     }),
                     {
                         indent: prettify,
@@ -174,6 +180,7 @@ export class Compiler {
                     this.formatter.format(file.FileRelationships, {
                         viewWrapper: file.Document,
                         file,
+                        stack: [],
                     }),
                     {
                         indent: prettify,
@@ -189,6 +196,7 @@ export class Compiler {
                     this.formatter.format(headerWrapper.View, {
                         viewWrapper: headerWrapper,
                         file,
+                        stack: [],
                     }),
                     {
                         indent: prettify,
@@ -212,6 +220,7 @@ export class Compiler {
                         this.formatter.format(headerWrapper.Relationships, {
                             viewWrapper: headerWrapper,
                             file,
+                            stack: [],
                         }),
                         {
                             indent: prettify,
@@ -228,6 +237,7 @@ export class Compiler {
                     this.formatter.format(footerWrapper.View, {
                         viewWrapper: footerWrapper,
                         file,
+                        stack: [],
                     }),
                     {
                         indent: prettify,
@@ -251,6 +261,7 @@ export class Compiler {
                         this.formatter.format(footerWrapper.Relationships, {
                             viewWrapper: footerWrapper,
                             file,
+                            stack: [],
                         }),
                         {
                             indent: prettify,
@@ -267,6 +278,7 @@ export class Compiler {
                     this.formatter.format(headerWrapper.View, {
                         viewWrapper: headerWrapper,
                         file,
+                        stack: [],
                     }),
                     {
                         indent: prettify,
@@ -279,8 +291,10 @@ export class Compiler {
                 // TODO: 0 needs to be changed when headers get relationships of their own
                 const xmlData = this.imageReplacer.replace(tempXmlData, mediaDatas, 0);
 
+                const referenedXmlData = this.numberingReplacer.replace(xmlData, file.Numbering.ConcreteNumbering);
+
                 return {
-                    data: xmlData,
+                    data: referenedXmlData,
                     path: `word/header${index + 1}.xml`,
                 };
             }),
@@ -289,6 +303,7 @@ export class Compiler {
                     this.formatter.format(footerWrapper.View, {
                         viewWrapper: footerWrapper,
                         file,
+                        stack: [],
                     }),
                     {
                         indent: prettify,
@@ -301,8 +316,10 @@ export class Compiler {
                 // TODO: 0 needs to be changed when headers get relationships of their own
                 const xmlData = this.imageReplacer.replace(tempXmlData, mediaDatas, 0);
 
+                const referenedXmlData = this.numberingReplacer.replace(xmlData, file.Numbering.ConcreteNumbering);
+
                 return {
-                    data: xmlData,
+                    data: referenedXmlData,
                     path: `word/footer${index + 1}.xml`,
                 };
             }),
@@ -311,6 +328,7 @@ export class Compiler {
                     this.formatter.format(file.ContentTypes, {
                         viewWrapper: file.Document,
                         file,
+                        stack: [],
                     }),
                     {
                         indent: prettify,
@@ -326,6 +344,7 @@ export class Compiler {
                     this.formatter.format(file.CustomProperties, {
                         viewWrapper: file.Document,
                         file,
+                        stack: [],
                     }),
                     {
                         indent: prettify,
@@ -342,6 +361,7 @@ export class Compiler {
                     this.formatter.format(file.AppProperties, {
                         viewWrapper: file.Document,
                         file,
+                        stack: [],
                     }),
                     {
                         indent: prettify,
@@ -357,7 +377,8 @@ export class Compiler {
                 data: xml(
                     this.formatter.format(file.FootNotes.View, {
                         viewWrapper: file.FootNotes,
-                        file: file,
+                        file,
+                        stack: [],
                     }),
                     {
                         indent: prettify,
@@ -372,7 +393,8 @@ export class Compiler {
                 data: xml(
                     this.formatter.format(file.FootNotes.Relationships, {
                         viewWrapper: file.FootNotes,
-                        file: file,
+                        file,
+                        stack: [],
                     }),
                     {
                         indent: prettify,
@@ -388,6 +410,7 @@ export class Compiler {
                     this.formatter.format(file.Settings, {
                         viewWrapper: file.Document,
                         file,
+                        stack: [],
                     }),
                     {
                         indent: prettify,
@@ -398,6 +421,23 @@ export class Compiler {
                     },
                 ),
                 path: "word/settings.xml",
+            },
+            Comments: {
+                data: xml(
+                    this.formatter.format(file.Comments, {
+                        viewWrapper: file.Document,
+                        file,
+                        stack: [],
+                    }),
+                    {
+                        indent: prettify,
+                        declaration: {
+                            standalone: "yes",
+                            encoding: "UTF-8",
+                        },
+                    },
+                ),
+                path: "word/comments.xml",
             },
         };
     }

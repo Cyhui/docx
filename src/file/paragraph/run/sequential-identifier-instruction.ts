@@ -1,13 +1,11 @@
 // http://officeopenxml.com/WPfieldInstructions.php
-import { SpaceType } from "file/space-type";
-import { XmlAttributeComponent, XmlComponent } from "file/xml-components";
+import { SpaceType } from "@file/shared";
+import { XmlComponent } from "@file/xml-components";
 
-class TextAttributes extends XmlAttributeComponent<{ readonly space: SpaceType }> {
-    protected readonly xmlKeys = { space: "xml:space" };
-}
+import { TextAttributes } from "./text-attributes";
 
 export class SequentialIdentifierInstruction extends XmlComponent {
-    constructor(identifier: string) {
+    public constructor(identifier: string) {
         super("w:instrText");
         this.root.push(new TextAttributes({ space: SpaceType.PRESERVE }));
         this.root.push(`SEQ ${identifier}`);

@@ -1,12 +1,9 @@
-import { SpaceType } from "file/space-type";
-import { XmlAttributeComponent, XmlComponent } from "file/xml-components";
-
-class TextAttributes extends XmlAttributeComponent<{ readonly space: SpaceType }> {
-    protected readonly xmlKeys = { space: "xml:space" };
-}
+import { TextAttributes } from "@file/paragraph/run/text-attributes";
+import { SpaceType } from "@file/shared";
+import { XmlComponent } from "@file/xml-components";
 
 export class DeletedText extends XmlComponent {
-    constructor(text: string) {
+    public constructor(text: string) {
         super("w:delText");
         this.root.push(new TextAttributes({ space: SpaceType.PRESERVE }));
 

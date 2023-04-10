@@ -1,4 +1,4 @@
-import { Attributes, XmlComponent } from "file/xml-components";
+import { Attributes, XmlComponent } from "@file/xml-components";
 
 // <xsd:complexType name="CT_AbstractNum">
 //     ...
@@ -15,7 +15,7 @@ import { Attributes, XmlComponent } from "file/xml-components";
 //                 </xsd:restriction>
 //             </xsd:simpleType>
 export class MultiLevelType extends XmlComponent {
-    constructor(value: string) {
+    public constructor(value: string) {
         super("w:multiLevelType");
         this.root.push(
             new Attributes({

@@ -1,4 +1,4 @@
-import { IRunStylePropertiesOptions, RunProperties } from "file/paragraph/run/properties";
+import { IRunStylePropertiesOptions, RunProperties } from "@file/paragraph/run/properties";
 
 import { IStyleOptions, Style } from "./style";
 
@@ -8,13 +8,12 @@ export interface IBaseCharacterStyleOptions extends IStyleOptions {
 
 export interface ICharacterStyleOptions extends IBaseCharacterStyleOptions {
     readonly id: string;
-    readonly name?: string;
 }
 
 export class StyleForCharacter extends Style {
     private readonly runProperties: RunProperties;
 
-    constructor(options: ICharacterStyleOptions) {
+    public constructor(options: ICharacterStyleOptions) {
         super(
             { type: "character", styleId: options.id },
             {

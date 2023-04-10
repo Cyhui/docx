@@ -1,4 +1,4 @@
-import { XmlAttributeComponent, XmlComponent } from "file/xml-components";
+import { XmlAttributeComponent, XmlComponent } from "@file/xml-components";
 
 export enum PageTextDirectionType {
     LEFT_TO_RIGHT_TOP_TO_BOTTOM = "lrTb",
@@ -10,7 +10,7 @@ class PageTextDirectionAttributes extends XmlAttributeComponent<{ readonly val: 
 }
 
 export class PageTextDirection extends XmlComponent {
-    constructor(value: PageTextDirectionType) {
+    public constructor(value: PageTextDirectionType) {
         super("w:textDirection");
 
         this.root.push(

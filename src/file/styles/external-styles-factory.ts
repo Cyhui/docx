@@ -1,4 +1,4 @@
-import { convertToXmlComponent, ImportedRootElementAttributes, ImportedXmlComponent } from "file/xml-components";
+import { convertToXmlComponent, ImportedRootElementAttributes, ImportedXmlComponent } from "@file/xml-components";
 import { Element as XMLElement, xml2js } from "xml-js";
 import { Styles } from "./";
 
@@ -23,6 +23,7 @@ export class ExternalStylesFactory {
      *   <w:docDefaults>Or any other element will be parsed to</w:docDefaults>
      *
      * </w:styles>
+     *
      * @param externalStyles context from styles.xml
      */
     public newInstance(xmlData: string): Styles {

@@ -1,6 +1,6 @@
 import { expect } from "chai";
 
-import { Formatter } from "export/formatter";
+import { Formatter } from "@export/formatter";
 
 import { Settings } from "./settings";
 
@@ -59,6 +59,81 @@ describe("Settings", () => {
 
             expect(tree["w:settings"]).to.deep.include({
                 "w:trackRevisions": {},
+            });
+        });
+
+        it("should add compatibility setting with default compatability version", () => {
+            const settings = new Settings({
+                compatibility: {},
+            });
+
+            const tree = new Formatter().format(settings);
+            expect(Object.keys(tree)).has.length(1);
+            expect(tree["w:settings"]).to.be.an("array");
+
+            expect(tree["w:settings"]).to.deep.include({
+                "w:compat": [
+                    {
+                        "w:compatSetting": {
+                            _attr: {
+                                "w:name": "compatibilityMode",
+                                "w:uri": "http://schemas.microsoft.com/office/word",
+                                "w:val": 15,
+                            },
+                        },
+                    },
+                ],
+            });
+        });
+
+        it("should add compatibility setting with version", () => {
+            const settings = new Settings({
+                compatibility: {
+                    version: 99,
+                },
+            });
+
+            const tree = new Formatter().format(settings);
+            expect(Object.keys(tree)).has.length(1);
+            expect(tree["w:settings"]).to.be.an("array");
+
+            expect(tree["w:settings"]).to.deep.include({
+                "w:compat": [
+                    {
+                        "w:compatSetting": {
+                            _attr: {
+                                "w:name": "compatibilityMode",
+                                "w:uri": "http://schemas.microsoft.com/office/word",
+                                "w:val": 99,
+                            },
+                        },
+                    },
+                ],
+            });
+        });
+
+        // TODO: Remove when deprecating compatibilityModeVersion
+        it("should add compatibility setting with legacy version", () => {
+            const settings = new Settings({
+                compatibilityModeVersion: 99,
+            });
+
+            const tree = new Formatter().format(settings);
+            expect(Object.keys(tree)).has.length(1);
+            expect(tree["w:settings"]).to.be.an("array");
+
+            expect(tree["w:settings"]).to.deep.include({
+                "w:compat": [
+                    {
+                        "w:compatSetting": {
+                            _attr: {
+                                "w:name": "compatibilityMode",
+                                "w:uri": "http://schemas.microsoft.com/office/word",
+                                "w:val": 99,
+                            },
+                        },
+                    },
+                ],
             });
         });
     });

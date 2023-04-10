@@ -1,5 +1,5 @@
-import { IParagraphStylePropertiesOptions, IRunStylePropertiesOptions, ParagraphProperties } from "file/paragraph";
-import { RunProperties } from "file/paragraph/run/properties";
+import { IParagraphStylePropertiesOptions, IRunStylePropertiesOptions, ParagraphProperties } from "@file/paragraph";
+import { RunProperties } from "@file/paragraph/run/properties";
 import { IStyleOptions, Style } from "./style";
 
 export interface IBaseParagraphStyleOptions extends IStyleOptions {
@@ -9,14 +9,13 @@ export interface IBaseParagraphStyleOptions extends IStyleOptions {
 
 export interface IParagraphStyleOptions extends IBaseParagraphStyleOptions {
     readonly id: string;
-    readonly name?: string;
 }
 
 export class StyleForParagraph extends Style {
     private readonly paragraphProperties: ParagraphProperties;
     private readonly runProperties: RunProperties;
 
-    constructor(options: IParagraphStyleOptions) {
+    public constructor(options: IParagraphStyleOptions) {
         super({ type: "paragraph", styleId: options.id }, options);
 
         this.paragraphProperties = new ParagraphProperties(options.paragraph);

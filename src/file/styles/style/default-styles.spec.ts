@@ -1,8 +1,9 @@
 import { expect } from "chai";
-import { Formatter } from "export/formatter";
-import * as defaultStyles from "./default-styles";
 
-import { EMPTY_OBJECT } from "file/xml-components";
+import { Formatter } from "@export/formatter";
+import { EMPTY_OBJECT } from "@file/xml-components";
+
+import * as defaultStyles from "./default-styles";
 
 describe("Default Styles", () => {
     it("HeadingStyle#constructor", () => {

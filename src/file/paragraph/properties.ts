@@ -1,6 +1,6 @@
 // http://officeopenxml.com/WPparagraphProperties.php
 // https://c-rex.net/projects/samples/ooxml/e1/Part4/OOXML_P4_DOCX_suppressLineNumbers_topic_ID0ECJAO.html
-import { IContext, IgnoreIfEmptyXmlComponent, IXmlableObject, OnOffElement, XmlComponent } from "file/xml-components";
+import { IContext, IgnoreIfEmptyXmlComponent, IXmlableObject, OnOffElement, XmlComponent } from "@file/xml-components";
 import { DocumentWrapper } from "../document-wrapper";
 import { IShadingAttributesProperties, Shading } from "../shading";
 import { Alignment, AlignmentType } from "./formatting/alignment";
@@ -9,8 +9,9 @@ import { PageBreakBefore } from "./formatting/break";
 import { IIndentAttributesProperties, Indent } from "./formatting/indent";
 import { ISpacingProperties, Spacing } from "./formatting/spacing";
 import { HeadingLevel, Style } from "./formatting/style";
-import { LeaderType, TabStop, TabStopPosition, TabStopType } from "./formatting/tab-stop";
+import { TabStop, TabStopDefinition, TabStopType } from "./formatting/tab-stop";
 import { NumberProperties } from "./formatting/unordered-list";
+import { WordWrap } from "./formatting/word-wrap";
 import { FrameProperties, IFrameOptions } from "./frame/frame-properties";
 import { OutlineLevel } from "./links";
 
@@ -22,7 +23,13 @@ export interface ILevelParagraphStylePropertiesOptions {
     readonly leftTabStop?: number;
     readonly indent?: IIndentAttributesProperties;
     readonly spacing?: ISpacingProperties;
+    /**
+     * Specifies that the paragraph (or at least part of it) should be rendered on the same page as the next paragraph when possible. If multiple paragraphs are to be kept together but they exceed a page, then the set of paragraphs begin on a new page and page breaks are used thereafter as needed.
+     */
     readonly keepNext?: boolean;
+    /**
+     * Specifies that all lines of the paragraph are to be kept on a single page when possible.
+     */
     readonly keepLines?: boolean;
     readonly outlineLevel?: number;
 }
@@ -41,11 +48,7 @@ export interface IParagraphPropertiesOptions extends IParagraphStylePropertiesOp
     readonly heading?: HeadingLevel;
     readonly bidirectional?: boolean;
     readonly pageBreakBefore?: boolean;
-    readonly tabStops?: {
-        readonly position: number | TabStopPosition;
-        readonly type: TabStopType;
-        readonly leader?: LeaderType;
-    }[];
+    readonly tabStops?: readonly TabStopDefinition[];
     readonly style?: string;
     readonly bullet?: {
         readonly level: number;
@@ -54,12 +57,20 @@ export interface IParagraphPropertiesOptions extends IParagraphStylePropertiesOp
     readonly widowControl?: boolean;
     readonly frame?: IFrameOptions;
     readonly suppressLineNumbers?: boolean;
+    readonly wordWrap?: boolean;
+    readonly scale?: number;
+    /**
+     * This element specifies whether inter-character spacing shall automatically be adjusted between regions of numbers and regions of East Asian text in the current paragraph. These regions shall be determined by the Unicode character values of the text content within the paragraph.
+     * This only works in Microsoft Word. It is not part of the ECMA-376 OOXML standard.
+     */
+    readonly autoSpaceEastAsianText?: boolean;
 }
 
 export class ParagraphProperties extends IgnoreIfEmptyXmlComponent {
+    // eslint-disable-next-line functional/prefer-readonly-type
     private readonly numberingReferences: { readonly reference: string; readonly instance: number }[] = [];
 
-    constructor(options?: IParagraphPropertiesOptions) {
+    public constructor(options?: IParagraphPropertiesOptions) {
         super("w:pPr");
 
         if (!options) {
@@ -131,19 +142,26 @@ export class ParagraphProperties extends IgnoreIfEmptyXmlComponent {
             this.push(new Shading(options.shading));
         }
 
-        if (options.rightTabStop) {
-            this.push(new TabStop(TabStopType.RIGHT, options.rightTabStop));
+        if (options.wordWrap) {
+            this.push(new WordWrap());
         }
 
-        if (options.tabStops) {
-            for (const tabStop of options.tabStops) {
-                this.push(new TabStop(tabStop.type, tabStop.position, tabStop.leader));
-            }
-        }
+        /**
+         * FIX: Multitab support for Libre Writer
+         * Ensure there is only one w:tabs tag with multiple w:tab
+         */
+        const tabDefinitions: readonly TabStopDefinition[] = [
+            ...(options.rightTabStop ? [{ type: TabStopType.RIGHT, position: options.rightTabStop }] : []),
+            ...(options.tabStops ? options.tabStops : []),
+            ...(options.leftTabStop ? [{ type: TabStopType.LEFT, position: options.leftTabStop }] : []),
+        ];
 
-        if (options.leftTabStop) {
-            this.push(new TabStop(TabStopType.LEFT, options.leftTabStop));
+        if (tabDefinitions.length > 0) {
+            this.push(new TabStop(tabDefinitions));
         }
+        /**
+         *  FIX - END
+         */
 
         if (options.bidirectional !== undefined) {
             this.push(new OnOffElement("w:bidi", options.bidirectional));
@@ -171,6 +189,10 @@ export class ParagraphProperties extends IgnoreIfEmptyXmlComponent {
 
         if (options.suppressLineNumbers !== undefined) {
             this.push(new OnOffElement("w:suppressLineNumbers", options.suppressLineNumbers));
+        }
+
+        if (options.autoSpaceEastAsianText !== undefined) {
+            this.push(new OnOffElement("w:autoSpaceDN", options.autoSpaceEastAsianText));
         }
     }
 

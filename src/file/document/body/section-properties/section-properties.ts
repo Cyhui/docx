@@ -1,13 +1,13 @@
 // http://officeopenxml.com/WPsection.php
 // tslint:disable: no-unnecessary-initializer
 
-import { FooterWrapper } from "file/footer-wrapper";
-import { HeaderWrapper } from "file/header-wrapper";
-import { VerticalAlign, VerticalAlignElement } from "file/vertical-align";
-import { OnOffElement, XmlComponent } from "file/xml-components";
+import { FooterWrapper } from "@file/footer-wrapper";
+import { HeaderWrapper } from "@file/header-wrapper";
+import { VerticalAlign, VerticalAlignElement } from "@file/vertical-align";
+import { OnOffElement, XmlComponent } from "@file/xml-components";
+import { PositiveUniversalMeasure, UniversalMeasure } from "@util/values";
 
 import { HeaderFooterReference, HeaderFooterReferenceType, HeaderFooterType } from "./properties/header-footer-reference";
-
 import { Columns, IColumnsAttributes } from "./properties/columns";
 import { DocumentGrid, IDocGridAttributesProperties } from "./properties/doc-grid";
 import { ILineNumberAttributes, LineNumberType } from "./properties/line-number";
@@ -76,10 +76,10 @@ export interface ISectionPropertiesOptions {
 // </xsd:group>
 
 export const sectionMarginDefaults = {
-    TOP: "1in",
-    RIGHT: "1in",
-    BOTTOM: "1in",
-    LEFT: "1in",
+    TOP: "1in" as UniversalMeasure,
+    RIGHT: "1in" as PositiveUniversalMeasure,
+    BOTTOM: "1in" as UniversalMeasure,
+    LEFT: "1in" as PositiveUniversalMeasure,
     HEADER: 708,
     FOOTER: 708,
     GUTTER: 0,
@@ -92,7 +92,7 @@ export const sectionPageSizeDefaults = {
 };
 
 export class SectionProperties extends XmlComponent {
-    constructor({
+    public constructor({
         page: {
             size: {
                 width = sectionPageSizeDefaults.WIDTH,

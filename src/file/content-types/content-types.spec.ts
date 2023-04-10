@@ -2,7 +2,7 @@
 
 import { expect } from "chai";
 
-import { Formatter } from "export/formatter";
+import { Formatter } from "@export/formatter";
 
 import { ContentTypes } from "./content-types";
 
@@ -102,7 +102,7 @@ describe("ContentTypes", () => {
             contentTypes.addFooter(102);
             const tree = new Formatter().format(contentTypes);
 
-            expect(tree["Types"][16]).to.deep.equal({
+            expect(tree["Types"][17]).to.deep.equal({
                 Override: {
                     _attr: {
                         ContentType: "application/vnd.openxmlformats-officedocument.wordprocessingml.footer+xml",
@@ -111,7 +111,7 @@ describe("ContentTypes", () => {
                 },
             });
 
-            expect(tree["Types"][17]).to.deep.equal({
+            expect(tree["Types"][18]).to.deep.equal({
                 Override: {
                     _attr: {
                         ContentType: "application/vnd.openxmlformats-officedocument.wordprocessingml.footer+xml",
@@ -128,7 +128,7 @@ describe("ContentTypes", () => {
             contentTypes.addHeader(202);
             const tree = new Formatter().format(contentTypes);
 
-            expect(tree["Types"][16]).to.deep.equal({
+            expect(tree["Types"][17]).to.deep.equal({
                 Override: {
                     _attr: {
                         ContentType: "application/vnd.openxmlformats-officedocument.wordprocessingml.header+xml",
@@ -137,7 +137,7 @@ describe("ContentTypes", () => {
                 },
             });
 
-            expect(tree["Types"][17]).to.deep.equal({
+            expect(tree["Types"][18]).to.deep.equal({
                 Override: {
                     _attr: {
                         ContentType: "application/vnd.openxmlformats-officedocument.wordprocessingml.header+xml",

@@ -1,5 +1,5 @@
-import { IMediaData, IMediaDataTransformation } from "file/media";
-import { XmlComponent } from "file/xml-components";
+import { IMediaData, IMediaDataTransformation } from "@file/media";
+import { XmlComponent } from "@file/xml-components";
 
 import { GraphicDataAttributes } from "./graphic-data-attribute";
 import { Pic } from "./pic";
@@ -7,7 +7,7 @@ import { Pic } from "./pic";
 export class GraphicData extends XmlComponent {
     private readonly pic: Pic;
 
-    constructor(mediaData: IMediaData, transform: IMediaDataTransformation) {
+    public constructor(mediaData: IMediaData, transform: IMediaDataTransformation) {
         super("a:graphicData");
 
         this.root.push(

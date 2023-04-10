@@ -1,5 +1,5 @@
 // http://officeopenxml.com/WPsection.php
-import { XmlAttributeComponent, XmlComponent } from "file/xml-components";
+import { XmlAttributeComponent, XmlComponent } from "@file/xml-components";
 
 // <xsd:simpleType name="ST_SectionMark">
 // <xsd:restriction base="xsd:string">
@@ -30,7 +30,7 @@ export class SectionTypeAttributes extends XmlAttributeComponent<{
 }
 
 export class Type extends XmlComponent {
-    constructor(value: SectionType) {
+    public constructor(value: SectionType) {
         super("w:type");
         this.root.push(new SectionTypeAttributes({ val: value }));
     }

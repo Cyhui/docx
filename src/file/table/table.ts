@@ -1,5 +1,5 @@
 // http://officeopenxml.com/WPtableGrid.php
-import { XmlComponent } from "file/xml-components";
+import { FileChild } from "@file/file-child";
 
 import { AlignmentType } from "../paragraph";
 import { TableGrid } from "./grid";
@@ -21,9 +21,9 @@ import { ITableWidthProperties } from "./table-width";
     algorithm will expand columns to fit its content
  */
 export interface ITableOptions {
-    readonly rows: TableRow[];
+    readonly rows: readonly TableRow[];
     readonly width?: ITableWidthProperties;
-    readonly columnWidths?: number[];
+    readonly columnWidths?: readonly number[];
     readonly margins?: ITableCellMarginOptions;
     readonly indent?: ITableWidthProperties;
     readonly float?: ITableFloatOptions;
@@ -34,10 +34,11 @@ export interface ITableOptions {
     readonly visuallyRightToLeft?: boolean;
 }
 
-export class Table extends XmlComponent {
-    constructor({
+export class Table extends FileChild {
+    public constructor({
         rows,
         width,
+        // eslint-disable-next-line functional/immutable-data
         columnWidths = Array<number>(Math.max(...rows.map((row) => row.CellCount))).fill(100),
         margins,
         indent,

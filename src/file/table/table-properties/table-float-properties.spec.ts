@@ -1,9 +1,14 @@
 import { expect } from "chai";
 
-import { Formatter } from "export/formatter";
+import { Formatter } from "@export/formatter";
 
-import { RelativeHorizontalPosition, RelativeVerticalPosition, TableAnchorType, TableFloatProperties } from "./table-float-properties";
-import { OverlapType } from "./table-overlap";
+import {
+    OverlapType,
+    RelativeHorizontalPosition,
+    RelativeVerticalPosition,
+    TableAnchorType,
+    TableFloatProperties,
+} from "./table-float-properties";
 
 describe("Table Float Properties", () => {
     describe("#constructor", () => {
@@ -33,9 +38,7 @@ describe("Table Float Properties", () => {
             expect(tree).to.deep.equal({
                 "w:tblpPr": [
                     {
-                        _attr: {
-                            overlap: "never",
-                        },
+                        _attr: {},
                     },
                     {
                         "w:tblOverlap": {

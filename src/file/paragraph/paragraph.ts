@@ -1,8 +1,8 @@
 // http://officeopenxml.com/WPparagraph.php
-
-import { uniqueId } from "convenience-functions";
-import { FootnoteReferenceRun } from "file/footnotes/footnote/run/reference-run";
-import { IContext, IXmlableObject, XmlComponent } from "file/xml-components";
+import { FootnoteReferenceRun } from "@file/footnotes";
+import { IContext, IXmlableObject } from "@file/xml-components";
+import { uniqueId } from "@util/convenience-functions";
+import { FileChild } from "@file/file-child";
 
 import { TargetModeType } from "../relationships/relationship/relationship";
 import { DeletedTextRun, InsertedTextRun } from "../track-revision";
@@ -11,6 +11,7 @@ import { Bookmark, ConcreteHyperlink, ExternalHyperlink, InternalHyperlink } fro
 import { Math } from "./math";
 import { IParagraphPropertiesOptions, ParagraphProperties } from "./properties";
 import { ImageRun, Run, SequentialIdentifier, SimpleField, SimpleMailMergeField, SymbolRun, TextRun } from "./run";
+import { Comment, CommentRangeEnd, CommentRangeStart, CommentReference, Comments } from "./run/comment-run";
 
 export type ParagraphChild =
     | TextRun
@@ -27,17 +28,22 @@ export type ParagraphChild =
     | DeletedTextRun
     | Math
     | SimpleField
-    | SimpleMailMergeField;
+    | SimpleMailMergeField
+    | Comments
+    | Comment
+    | CommentRangeStart
+    | CommentRangeEnd
+    | CommentReference;
 
 export interface IParagraphOptions extends IParagraphPropertiesOptions {
     readonly text?: string;
-    readonly children?: ParagraphChild[];
+    readonly children?: readonly ParagraphChild[];
 }
 
-export class Paragraph extends XmlComponent {
+export class Paragraph extends FileChild {
     private readonly properties: ParagraphProperties;
 
-    constructor(options: string | IParagraphOptions) {
+    public constructor(options: string | IParagraphOptions) {
         super("w:p");
 
         if (typeof options === "string") {

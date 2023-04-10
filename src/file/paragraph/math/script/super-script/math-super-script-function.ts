@@ -1,17 +1,17 @@
 // http://www.datypic.com/sc/ooxml/e-m_sSup-1.html
-import { XmlComponent } from "file/xml-components";
+import { XmlComponent } from "@file/xml-components";
 
 import { MathComponent } from "../../math-component";
 import { MathBase, MathSuperScriptElement } from "../../n-ary";
 import { MathSuperScriptProperties } from "./math-super-script-function-properties";
 
 export interface IMathSuperScriptOptions {
-    readonly children: MathComponent[];
-    readonly superScript: MathComponent[];
+    readonly children: readonly MathComponent[];
+    readonly superScript: readonly MathComponent[];
 }
 
 export class MathSuperScript extends XmlComponent {
-    constructor(options: IMathSuperScriptOptions) {
+    public constructor(options: IMathSuperScriptOptions) {
         super("m:sSup");
 
         this.root.push(new MathSuperScriptProperties());

@@ -7,11 +7,11 @@ export interface ISymbolRunOptions extends IRunOptions {
 }
 
 export class SymbolRun extends Run {
-    constructor(options: ISymbolRunOptions | string) {
+    public constructor(options: ISymbolRunOptions | string) {
         if (typeof options === "string") {
             super({});
             this.root.push(new Symbol(options));
-            return;
+            return this;
         }
 
         super(options);

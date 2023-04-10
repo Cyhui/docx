@@ -1,4 +1,4 @@
-import { IgnoreIfEmptyXmlComponent } from "file/xml-components";
+import { IgnoreIfEmptyXmlComponent } from "@file/xml-components";
 import { TableWidthElement, WidthType } from "../table-width";
 
 export interface ITableCellMarginOptions {
@@ -39,7 +39,10 @@ export enum TableCellMarginElementType {
 }
 
 export class TableCellMargin extends IgnoreIfEmptyXmlComponent {
-    constructor(type: TableCellMarginElementType, { marginUnitType = WidthType.DXA, top, left, bottom, right }: ITableCellMarginOptions) {
+    public constructor(
+        type: TableCellMarginElementType,
+        { marginUnitType = WidthType.DXA, top, left, bottom, right }: ITableCellMarginOptions,
+    ) {
         super(type);
 
         if (top !== undefined) {

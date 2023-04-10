@@ -1,5 +1,5 @@
-import { IMediaData } from "file/media";
-import { XmlAttributeComponent, XmlComponent } from "file/xml-components";
+import { IMediaData } from "@file/media";
+import { XmlAttributeComponent, XmlComponent } from "@file/xml-components";
 
 class BlipAttributes extends XmlAttributeComponent<{
     readonly embed: string;
@@ -12,7 +12,7 @@ class BlipAttributes extends XmlAttributeComponent<{
 }
 
 export class Blip extends XmlComponent {
-    constructor(mediaData: IMediaData) {
+    public constructor(mediaData: IMediaData) {
         super("a:blip");
         this.root.push(
             new BlipAttributes({

@@ -1,6 +1,6 @@
 // http://officeopenxml.com/WPtableBorders.php
-import { BorderElement, BorderStyle, IBorderOptions } from "file/border";
-import { XmlComponent } from "file/xml-components";
+import { BorderElement, BorderStyle, IBorderOptions } from "@file/border";
+import { XmlComponent } from "@file/xml-components";
 
 export interface ITableBordersOptions {
     readonly top?: IBorderOptions;
@@ -33,7 +33,7 @@ export class TableBorders extends XmlComponent {
         insideVertical: NONE_BORDER,
     };
 
-    constructor(options: ITableBordersOptions) {
+    public constructor(options: ITableBordersOptions) {
         super("w:tblBorders");
 
         if (options.top) {

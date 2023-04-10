@@ -1,16 +1,16 @@
 // http://officeopenxml.com/WPtableGrid.php
-import { Paragraph } from "file/paragraph";
-import { IContext, IXmlableObject, XmlComponent } from "file/xml-components";
+import { Paragraph } from "@file/paragraph";
+import { IContext, IXmlableObject, XmlComponent } from "@file/xml-components";
 
 import { Table } from "../table";
 import { ITableCellPropertiesOptions, TableCellProperties } from "./table-cell-properties";
 
 export interface ITableCellOptions extends ITableCellPropertiesOptions {
-    readonly children: (Paragraph | Table)[];
+    readonly children: readonly (Paragraph | Table)[];
 }
 
 export class TableCell extends XmlComponent {
-    constructor(readonly options: ITableCellOptions) {
+    public constructor(public readonly options: ITableCellOptions) {
         super("w:tc");
 
         this.root.push(new TableCellProperties(options));

@@ -1,4 +1,4 @@
-import { XmlAttributeComponent, XmlComponent } from "file/xml-components";
+import { XmlAttributeComponent, XmlComponent } from "@file/xml-components";
 
 export interface ILatentStyleExceptionAttributesProperties {
     readonly name?: string;
@@ -19,7 +19,7 @@ export class LatentStyleExceptionAttributes extends XmlAttributeComponent<ILaten
 }
 
 export class LatentStyleException extends XmlComponent {
-    constructor(attributes: ILatentStyleExceptionAttributesProperties) {
+    public constructor(attributes: ILatentStyleExceptionAttributesProperties) {
         super("w:lsdException");
         this.root.push(new LatentStyleExceptionAttributes(attributes));
     }

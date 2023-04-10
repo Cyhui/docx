@@ -1,6 +1,6 @@
 // http://officeopenxml.com/WPsectionBorders.php
-import { BorderElement, IBorderOptions } from "file/border";
-import { IgnoreIfEmptyXmlComponent, XmlAttributeComponent } from "file/xml-components";
+import { BorderElement, IBorderOptions } from "@file/border";
+import { IgnoreIfEmptyXmlComponent, XmlAttributeComponent } from "@file/xml-components";
 
 // <xsd:simpleType name="ST_PageBorderDisplay">
 // <xsd:restriction base="xsd:string">
@@ -71,11 +71,11 @@ class PageBordersAttributes extends XmlAttributeComponent<IPageBorderAttributes>
 // <xsd:attribute name="offsetFrom" type="ST_PageBorderOffset" use="optional" default="text"/>
 // </xsd:complexType>
 export class PageBorders extends IgnoreIfEmptyXmlComponent {
-    constructor(options?: IPageBordersOptions) {
+    public constructor(options?: IPageBordersOptions) {
         super("w:pgBorders");
 
         if (!options) {
-            return;
+            return this;
         }
 
         if (options.pageBorders) {

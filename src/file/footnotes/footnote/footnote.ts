@@ -1,5 +1,5 @@
-import { Paragraph } from "file/paragraph";
-import { XmlComponent } from "file/xml-components";
+import { Paragraph } from "@file/paragraph";
+import { XmlComponent } from "@file/xml-components";
 
 import { FootnoteAttributes } from "./footnote-attributes";
 import { FootnoteRefRun } from "./run/footnote-ref-run";
@@ -12,11 +12,11 @@ export enum FootnoteType {
 export interface IFootnoteOptions {
     readonly id: number;
     readonly type?: FootnoteType;
-    readonly children: Paragraph[];
+    readonly children: readonly Paragraph[];
 }
 
 export class Footnote extends XmlComponent {
-    constructor(options: IFootnoteOptions) {
+    public constructor(options: IFootnoteOptions) {
         super("w:footnote");
         this.root.push(
             new FootnoteAttributes({

@@ -1,5 +1,5 @@
-import { VerticalAlign, VerticalAlignElement } from "file/vertical-align";
-import { IgnoreIfEmptyXmlComponent } from "file/xml-components";
+import { VerticalAlign, VerticalAlignElement } from "@file/vertical-align";
+import { IgnoreIfEmptyXmlComponent } from "@file/xml-components";
 
 import { IShadingAttributesProperties, Shading } from "../../shading";
 import { ITableCellMarginOptions, TableCellMargin, TableCellMarginElementType } from "../table-properties/table-cell-margin";
@@ -27,7 +27,7 @@ export interface ITableCellPropertiesOptions {
 }
 
 export class TableCellProperties extends IgnoreIfEmptyXmlComponent {
-    constructor(options: ITableCellPropertiesOptions) {
+    public constructor(options: ITableCellPropertiesOptions) {
         super("w:tcPr");
 
         if (options.width) {

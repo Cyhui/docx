@@ -1,4 +1,8 @@
-import { StringContainer, XmlComponent } from "file/xml-components";
+import { ICommentsOptions } from "@file/paragraph/run/comment-run";
+import { ICompatibilityOptions } from "@file/settings/compatibility";
+import { StringContainer, XmlComponent } from "@file/xml-components";
+import { dateTimeValue } from "@util/values";
+
 import { ICustomPropertyOptions } from "../custom-properties";
 import { IDocumentBackgroundOptions } from "../document";
 
@@ -7,10 +11,9 @@ import { ISectionOptions } from "../file";
 import { INumberingOptions } from "../numbering";
 import { Paragraph } from "../paragraph";
 import { IStylesOptions } from "../styles";
-import { dateTimeValue } from "../values";
 
 export interface IPropertiesOptions {
-    readonly sections: ISectionOptions[];
+    readonly sections: readonly ISectionOptions[];
     readonly title?: string;
     readonly subject?: string;
     readonly creator?: string;
@@ -21,9 +24,10 @@ export interface IPropertiesOptions {
     readonly externalStyles?: string;
     readonly styles?: IStylesOptions;
     readonly numbering?: INumberingOptions;
+    readonly comments?: ICommentsOptions;
     readonly footnotes?: {
         readonly [key: string]: {
-            readonly children: Paragraph[];
+            readonly children: readonly Paragraph[];
         };
     };
     readonly background?: IDocumentBackgroundOptions;
@@ -32,12 +36,14 @@ export interface IPropertiesOptions {
         readonly updateFields?: boolean;
     };
     readonly compatabilityModeVersion?: number;
-    readonly customProperties?: ICustomPropertyOptions[];
+    readonly compatibility?: ICompatibilityOptions;
+    readonly customProperties?: readonly ICustomPropertyOptions[];
     readonly evenAndOddHeaderAndFooters?: boolean;
 }
 
 // <xs:element name="coreProperties" type="CT_CoreProperties"/>
 
+/* cSpell:disable */
 // <xs:complexType name="CT_CoreProperties">
 //   <xs:all>
 //     <xs:element name="category" minOccurs="0" maxOccurs="1" type="xs:string"/>
@@ -57,9 +63,10 @@ export interface IPropertiesOptions {
 //     <xs:element name="version" minOccurs="0" maxOccurs="1" type="xs:string"/>
 //   </xs:all>
 // </xs:complexType>
+/* cSpell:enable */
 
 export class CoreProperties extends XmlComponent {
-    constructor(options: Omit<IPropertiesOptions, "sections">) {
+    public constructor(options: Omit<IPropertiesOptions, "sections">) {
         super("cp:coreProperties");
         this.root.push(
             new DocumentAttributes({
@@ -97,7 +104,7 @@ export class CoreProperties extends XmlComponent {
 }
 
 class TimestampElement extends XmlComponent {
-    constructor(name: string) {
+    public constructor(name: string) {
         super(name);
         this.root.push(
             new DocumentAttributes({

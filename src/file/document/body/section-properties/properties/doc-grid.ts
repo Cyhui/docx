@@ -1,5 +1,5 @@
-import { decimalNumber } from "file/values";
-import { XmlAttributeComponent, XmlComponent } from "file/xml-components";
+import { XmlAttributeComponent, XmlComponent } from "@file/xml-components";
+import { decimalNumber } from "@util/values";
 
 // not implemented
 // <xsd:simpleType name="ST_DocGrid">
@@ -38,7 +38,7 @@ export class DocGridAttributes extends XmlAttributeComponent<IDocGridAttributesP
 }
 
 export class DocumentGrid extends XmlComponent {
-    constructor(linePitch: number, charSpace?: number, type?: DocumentGridType) {
+    public constructor(linePitch: number, charSpace?: number, type?: DocumentGridType) {
         super("w:docGrid");
 
         this.root.push(

@@ -1,5 +1,5 @@
-import { twipsMeasureValue } from "file/values";
-import { XmlAttributeComponent, XmlComponent } from "file/xml-components";
+import { XmlAttributeComponent, XmlComponent } from "@file/xml-components";
+import { PositiveUniversalMeasure, twipsMeasureValue } from "@util/values";
 
 // <xsd:complexType name="CT_Height">
 //     <xsd:attribute name="val" type="s:ST_TwipsMeasure"/>
@@ -30,7 +30,7 @@ export class TableRowHeightAttributes extends XmlAttributeComponent<{
 }
 
 export class TableRowHeight extends XmlComponent {
-    constructor(value: number | string, rule: HeightRule) {
+    public constructor(value: number | PositiveUniversalMeasure, rule: HeightRule) {
         super("w:trHeight");
 
         this.root.push(

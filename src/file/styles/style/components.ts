@@ -1,6 +1,6 @@
 // http://officeopenxml.com/WPstyleGenProps.php
-import { decimalNumber } from "file/values";
-import { XmlAttributeComponent, XmlComponent } from "file/xml-components";
+import { XmlAttributeComponent, XmlComponent } from "@file/xml-components";
+import { decimalNumber } from "@util/values";
 
 class ComponentAttributes extends XmlAttributeComponent<{
     readonly val: string | number;
@@ -9,14 +9,14 @@ class ComponentAttributes extends XmlAttributeComponent<{
 }
 
 export class Name extends XmlComponent {
-    constructor(value: string) {
+    public constructor(value: string) {
         super("w:name");
         this.root.push(new ComponentAttributes({ val: value }));
     }
 }
 
 export class UiPriority extends XmlComponent {
-    constructor(value: number) {
+    public constructor(value: number) {
         super("w:uiPriority");
         this.root.push(new ComponentAttributes({ val: decimalNumber(value) }));
     }

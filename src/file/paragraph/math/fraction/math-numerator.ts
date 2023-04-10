@@ -1,9 +1,9 @@
-import { XmlComponent } from "file/xml-components";
+import { XmlComponent } from "@file/xml-components";
 
 import { MathComponent } from "../math-component";
 
 export class MathNumerator extends XmlComponent {
-    constructor(children: MathComponent[]) {
+    public constructor(children: readonly MathComponent[]) {
         super("m:num");
 
         for (const child of children) {

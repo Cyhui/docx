@@ -1,8 +1,8 @@
 // http://officeopenxml.com/WPnumbering.php
 // https://stackoverflow.com/questions/58622437/purpose-of-abstractnum-and-numberinginstance
-import { convertInchesToTwip, uniqueNumericId } from "convenience-functions";
-import { AlignmentType } from "file/paragraph";
-import { IContext, IXmlableObject, XmlComponent } from "file/xml-components";
+import { AlignmentType } from "@file/paragraph";
+import { IContext, IXmlableObject, XmlComponent } from "@file/xml-components";
+import { convertInchesToTwip, uniqueNumericId } from "@util/convenience-functions";
 
 import { DocumentAttributes } from "../document/document-attributes";
 import { AbstractNumbering } from "./abstract-numbering";
@@ -10,8 +10,8 @@ import { ILevelsOptions, LevelFormat } from "./level";
 import { ConcreteNumbering } from "./num";
 
 export interface INumberingOptions {
-    readonly config: {
-        readonly levels: ILevelsOptions[];
+    readonly config: readonly {
+        readonly levels: readonly ILevelsOptions[];
         readonly reference: string;
     }[];
 }
@@ -31,7 +31,7 @@ export class Numbering extends XmlComponent {
     private readonly concreteNumberingMap = new Map<string, ConcreteNumbering>();
     private readonly referenceConfigMap = new Map<string, object>();
 
-    constructor(options: INumberingOptions) {
+    public constructor(options: INumberingOptions) {
         super("w:numbering");
         this.root.push(
             new DocumentAttributes({
@@ -164,10 +164,12 @@ export class Numbering extends XmlComponent {
                 abstractNumId: abstractNumbering.id,
                 reference: "default-bullet-numbering",
                 instance: 0,
-                overrideLevel: {
-                    num: 0,
-                    start: 1,
-                },
+                overrideLevels: [
+                    {
+                        num: 0,
+                        start: 1,
+                    },
+                ],
             }),
         );
 
@@ -203,33 +205,33 @@ export class Numbering extends XmlComponent {
             return;
         }
 
+        const referenceConfigLevels = this.referenceConfigMap.get(reference);
+        const firstLevelStartNumber = referenceConfigLevels && referenceConfigLevels[0].start;
+
         const concreteNumberingSettings = {
             numId: uniqueNumericId(),
             abstractNumId: abstractNumbering.id,
             reference,
             instance,
-            overrideLevel: {
-                num: 0,
-                start: 1,
-            },
+            overrideLevel:
+                firstLevelStartNumber && Number.isInteger(firstLevelStartNumber)
+                    ? {
+                          num: 0,
+                          start: firstLevelStartNumber,
+                      }
+                    : {
+                          num: 0,
+                          start: 1,
+                      },
         };
-
-        const referenceConfigLevels = this.referenceConfigMap.get(reference);
-        const firstLevelStartNumber = referenceConfigLevels && referenceConfigLevels[0].start;
-        if (firstLevelStartNumber && Number.isInteger(firstLevelStartNumber)) {
-            concreteNumberingSettings.overrideLevel = {
-                num: 0,
-                start: firstLevelStartNumber,
-            };
-        }
 
         this.concreteNumberingMap.set(fullReference, new ConcreteNumbering(concreteNumberingSettings));
     }
 
-    public get ConcreteNumbering(): ConcreteNumbering[] {
+    public get ConcreteNumbering(): readonly ConcreteNumbering[] {
         return Array.from(this.concreteNumberingMap.values());
     }
-    public get ReferenceConfig(): object[] {
+    public get ReferenceConfig(): readonly object[] {
         return Array.from(this.referenceConfigMap.values());
     }
 }

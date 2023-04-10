@@ -1,16 +1,16 @@
 // http://officeopenxml.com/WPbookmark.php
-import { uniqueNumericId } from "convenience-functions";
-import { XmlComponent } from "file/xml-components";
+import { XmlComponent } from "@file/xml-components";
+import { uniqueNumericId } from "@util/convenience-functions";
 
 import { ParagraphChild } from "../paragraph";
 import { BookmarkEndAttributes, BookmarkStartAttributes } from "./bookmark-attributes";
 
 export class Bookmark {
     public readonly start: BookmarkStart;
-    public readonly children: ParagraphChild[];
+    public readonly children: readonly ParagraphChild[];
     public readonly end: BookmarkEnd;
 
-    constructor(options: { readonly id: string; readonly children: ParagraphChild[] }) {
+    public constructor(options: { readonly id: string; readonly children: readonly ParagraphChild[] }) {
         const linkId = uniqueNumericId();
 
         this.start = new BookmarkStart(options.id, linkId);
@@ -52,7 +52,7 @@ export class Bookmark {
 // </xsd:complexType>
 
 export class BookmarkStart extends XmlComponent {
-    constructor(id: string, linkId: number) {
+    public constructor(id: string, linkId: number) {
         super("w:bookmarkStart");
 
         const attributes = new BookmarkStartAttributes({
@@ -64,7 +64,7 @@ export class BookmarkStart extends XmlComponent {
 }
 
 export class BookmarkEnd extends XmlComponent {
-    constructor(linkId: number) {
+    public constructor(linkId: number) {
         super("w:bookmarkEnd");
 
         const attributes = new BookmarkEndAttributes({

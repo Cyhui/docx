@@ -1,4 +1,4 @@
-import { XmlComponent } from "file/xml-components";
+import { XmlComponent } from "@file/xml-components";
 
 import { IRunOptions, TextRun } from "../../index";
 import { ChangeAttributes, IChangedAttributesProperties } from "../track-revision";
@@ -6,7 +6,7 @@ import { ChangeAttributes, IChangedAttributesProperties } from "../track-revisio
 interface IInsertedRunOptions extends IChangedAttributesProperties, IRunOptions {}
 
 export class InsertedTextRun extends XmlComponent {
-    constructor(options: IInsertedRunOptions) {
+    public constructor(options: IInsertedRunOptions) {
         super("w:ins");
         this.root.push(
             new ChangeAttributes({

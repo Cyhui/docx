@@ -1,5 +1,5 @@
-import { decimalNumber } from "file/values";
-import { XmlAttributeComponent, XmlComponent } from "file/xml-components";
+import { XmlAttributeComponent, XmlComponent } from "@file/xml-components";
+import { decimalNumber } from "@util/values";
 
 import { ILevelsOptions, Level } from "./level";
 import { MultiLevelType } from "./multi-level-type";
@@ -32,7 +32,7 @@ class AbstractNumberingAttributes extends XmlAttributeComponent<{
 export class AbstractNumbering extends XmlComponent {
     public readonly id: number;
 
-    constructor(id: number, levelOptions: ILevelsOptions[]) {
+    public constructor(id: number, levelOptions: readonly ILevelsOptions[]) {
         super("w:abstractNum");
         this.root.push(
             new AbstractNumberingAttributes({

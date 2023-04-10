@@ -1,4 +1,4 @@
-import { XmlAttributeComponent, XmlComponent } from "file/xml-components";
+import { XmlAttributeComponent, XmlComponent } from "@file/xml-components";
 
 // <xsd:complexType name="CT_VerticalJc">
 //     <xsd:attribute name="val" type="ST_VerticalJc" use="required"/>
@@ -8,12 +8,10 @@ import { XmlAttributeComponent, XmlComponent } from "file/xml-components";
 // <xsd:restriction base="xsd:string">
 //   <xsd:enumeration value="top"/>
 //   <xsd:enumeration value="center"/>
-//   <xsd:enumeration value="both"/>
 //   <xsd:enumeration value="bottom"/>
 // </xsd:restriction>
 // </xsd:simpleType>
 export enum VerticalAlign {
-    BOTH = "both",
     BOTTOM = "bottom",
     CENTER = "center",
     TOP = "top",
@@ -27,7 +25,7 @@ export class VerticalAlignAttributes extends XmlAttributeComponent<{
 }
 
 export class VerticalAlignElement extends XmlComponent {
-    constructor(value: VerticalAlign) {
+    public constructor(value: VerticalAlign) {
         super("w:vAlign");
         this.root.push(new VerticalAlignAttributes({ verticalAlign: value }));
     }

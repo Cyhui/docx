@@ -1,6 +1,6 @@
 import { expect } from "chai";
 
-import { Formatter } from "export/formatter";
+import { Formatter } from "@export/formatter";
 
 import { Column, Columns } from ".";
 
@@ -11,6 +11,13 @@ describe("Columns", () => {
             const tree = new Formatter().format(columns);
 
             expect(tree["w:cols"]).to.deep.equal({ _attr: { "w:num": 3, "w:space": 720 } });
+        });
+
+        it("should create set space and count to undefined if they are undefined", () => {
+            const columns = new Columns({});
+            const tree = new Formatter().format(columns);
+
+            expect(tree["w:cols"]).to.deep.equal({ _attr: {} });
         });
 
         it("should ignore individual column attributes if equalWidth is true", () => {

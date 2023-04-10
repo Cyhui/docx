@@ -1,16 +1,14 @@
 // http://officeopenxml.com/WPfieldInstructions.php
-import { SpaceType } from "file/space-type";
-import { XmlAttributeComponent, XmlComponent } from "file/xml-components";
-import { ITableOfContentsOptions } from "./table-of-contents-properties";
+import { TextAttributes } from "@file/paragraph/run/text-attributes";
+import { SpaceType } from "@file/shared";
+import { XmlComponent } from "@file/xml-components";
 
-class TextAttributes extends XmlAttributeComponent<{ readonly space: SpaceType }> {
-    protected readonly xmlKeys = { space: "xml:space" };
-}
+import { ITableOfContentsOptions } from "./table-of-contents-properties";
 
 export class FieldInstruction extends XmlComponent {
     private readonly properties: ITableOfContentsOptions;
 
-    constructor(properties: ITableOfContentsOptions = {}) {
+    public constructor(properties: ITableOfContentsOptions = {}) {
         super("w:instrText");
 
         this.properties = properties;

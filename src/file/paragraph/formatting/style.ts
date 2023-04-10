@@ -1,4 +1,4 @@
-import { Attributes, XmlComponent } from "file/xml-components";
+import { Attributes, XmlComponent } from "@file/xml-components";
 
 export enum HeadingLevel {
     HEADING_1 = "Heading1",
@@ -11,7 +11,7 @@ export enum HeadingLevel {
 }
 
 export class Style extends XmlComponent {
-    constructor(styleId: string) {
+    public constructor(styleId: string) {
         super("w:pStyle");
         this.root.push(
             new Attributes({

@@ -1,6 +1,6 @@
-import { Attributes, XmlComponent } from "file/xml-components";
+import { AttributeData, AttributePayload, Attributes, NextAttributeComponent, XmlComponent } from "@file/xml-components";
 
-import { hpsMeasureValue } from "../values";
+import { hpsMeasureValue, PositiveUniversalMeasure } from "@util/values";
 
 // This represents element type CT_OnOff, which indicate a boolean value.
 //
@@ -13,7 +13,7 @@ import { hpsMeasureValue } from "../values";
 //     <xsd:attribute name="val" type="s:ST_OnOff"/>
 // </xsd:complexType>
 export class OnOffElement extends XmlComponent {
-    constructor(name: string, val: boolean | undefined = true) {
+    public constructor(name: string, val: boolean | undefined = true) {
         super(name);
         if (val !== true) {
             this.root.push(new Attributes({ val }));
@@ -26,8 +26,13 @@ export class OnOffElement extends XmlComponent {
 // <xsd:complexType name="CT_HpsMeasure">
 //     <xsd:attribute name="val" type="ST_HpsMeasure" use="required"/>
 // </xsd:complexType>
+
+// <xsd:simpleType name="ST_HpsMeasure">
+//     <xsd:union memberTypes="s:ST_UnsignedDecimalNumber s:ST_PositiveUniversalMeasure" />
+// </xsd:simpleType>
+
 export class HpsMeasureElement extends XmlComponent {
-    constructor(name: string, val: number | string) {
+    public constructor(name: string, val: number | PositiveUniversalMeasure) {
         super(name);
         this.root.push(new Attributes({ val: hpsMeasureValue(val) }));
     }
@@ -35,11 +40,16 @@ export class HpsMeasureElement extends XmlComponent {
 
 // This represents element type CT_String, which indicate a string value.
 //
+// <xsd:complexType name="CT_Empty"/>
+export class EmptyElement extends XmlComponent {}
+
+// This represents element type CT_Empty, which indicate aan empty element.
+//
 // <xsd:complexType name="CT_String">
 //     <xsd:attribute name="val" type="s:ST_String" use="required"/>
 // </xsd:complexType>
 export class StringValueElement extends XmlComponent {
-    constructor(name: string, val: string) {
+    public constructor(name: string, val: string) {
         super(name);
         this.root.push(new Attributes({ val }));
     }
@@ -47,7 +57,14 @@ export class StringValueElement extends XmlComponent {
 
 // This represents various number element types.
 export class NumberValueElement extends XmlComponent {
-    constructor(name: string, val: number) {
+    public constructor(name: string, val: number) {
+        super(name);
+        this.root.push(new Attributes({ val }));
+    }
+}
+
+export class StringEnumValueElement<T extends string> extends XmlComponent {
+    public constructor(name: string, val: T) {
         super(name);
         this.root.push(new Attributes({ val }));
     }
@@ -58,8 +75,24 @@ export class NumberValueElement extends XmlComponent {
 // new StringContainer("hello", "world")
 // <hello>world</hello>
 export class StringContainer extends XmlComponent {
-    constructor(name: string, val: string) {
+    public constructor(name: string, val: string) {
         super(name);
         this.root.push(val);
+    }
+}
+
+export class BuilderElement<T extends AttributeData> extends XmlComponent {
+    public constructor(options: {
+        readonly name: string;
+        readonly attributes?: AttributePayload<T>;
+        readonly children?: readonly XmlComponent[];
+    }) {
+        super(options.name);
+
+        if (options.attributes) {
+            this.root.push(new NextAttributeComponent(options.attributes));
+        }
+
+        // TODO: Children
     }
 }

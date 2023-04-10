@@ -1,8 +1,8 @@
 import { expect } from "chai";
 
-import { Formatter } from "export/formatter";
-import { sectionMarginDefaults, sectionPageSizeDefaults } from "./document";
+import { Formatter } from "@export/formatter";
 
+import { sectionMarginDefaults, sectionPageSizeDefaults } from "./document";
 import { File } from "./file";
 import { Footer, Header } from "./header";
 import { Paragraph } from "./paragraph";
@@ -386,5 +386,60 @@ describe("File", () => {
         const tree = new Formatter().format(doc.Settings);
 
         expect(tree["w:settings"][2]).to.deep.equal({ "w:evenAndOddHeaders": {} });
+    });
+
+    describe("#comments", () => {
+        it("should create comments", () => {
+            const doc = new File({
+                comments: {
+                    children: [],
+                },
+                sections: [],
+            });
+
+            expect(doc.Comments).to.not.be.undefined;
+        });
+    });
+
+    describe("#numbering", () => {
+        it("should create", () => {
+            const doc = new File({
+                numbering: { config: [] },
+                sections: [],
+            });
+
+            expect(doc.Numbering).to.not.be.undefined;
+        });
+    });
+
+    describe("#getters", () => {
+        it("should have defined getters", () => {
+            const doc = new File({
+                sections: [],
+            });
+
+            expect(doc.CoreProperties).to.not.be.undefined;
+            expect(doc.Media).to.not.be.undefined;
+            expect(doc.FileRelationships).to.not.be.undefined;
+            expect(doc.Headers).to.not.be.undefined;
+            expect(doc.Footers).to.not.be.undefined;
+            expect(doc.ContentTypes).to.not.be.undefined;
+            expect(doc.CustomProperties).to.not.be.undefined;
+            expect(doc.AppProperties).to.not.be.undefined;
+            expect(doc.FootNotes).to.not.be.undefined;
+            expect(doc.Settings).to.not.be.undefined;
+            expect(doc.Comments).to.not.be.undefined;
+        });
+    });
+
+    describe("#externalStyles", () => {
+        it("should work with external styles", () => {
+            const doc = new File({
+                sections: [],
+                externalStyles: "",
+            });
+
+            expect(doc.Styles).to.not.be.undefined;
+        });
     });
 });

@@ -1,8 +1,31 @@
-import { File } from "file";
+import { Stream } from "stream";
+import { File } from "@file/file";
+
 import { Compiler } from "./next-compiler";
 
+/**
+ * Use blanks to prettify
+ */
+export enum PrettifyType {
+    NONE = "",
+    WITH_2_BLANKS = "  ",
+    WITH_4_BLANKS = "    ",
+    WITH_TAB = "\t",
+}
+
 export class Packer {
-    public static async toBuffer(file: File, prettify?: boolean): Promise<Buffer> {
+    public static async toString(file: File, prettify?: boolean | PrettifyType): Promise<string> {
+        const zip = this.compiler.compile(file, prettify);
+        const zipData = await zip.generateAsync({
+            type: "string",
+            mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+            compression: "DEFLATE",
+        });
+
+        return zipData;
+    }
+
+    public static async toBuffer(file: File, prettify?: boolean | PrettifyType): Promise<Buffer> {
         const zip = this.compiler.compile(file, prettify);
         const zipData = await zip.generateAsync({
             type: "nodebuffer",
@@ -13,7 +36,7 @@ export class Packer {
         return zipData;
     }
 
-    public static async toBase64String(file: File, prettify?: boolean): Promise<string> {
+    public static async toBase64String(file: File, prettify?: boolean | PrettifyType): Promise<string> {
         const zip = this.compiler.compile(file, prettify);
         const zipData = await zip.generateAsync({
             type: "base64",
@@ -24,10 +47,22 @@ export class Packer {
         return zipData;
     }
 
-    public static async toBlob(file: File, prettify?: boolean): Promise<Blob> {
+    public static async toBlob(file: File, prettify?: boolean | PrettifyType): Promise<Blob> {
         const zip = this.compiler.compile(file, prettify);
         const zipData = await zip.generateAsync({
             type: "blob",
+            mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+            compression: "DEFLATE",
+        });
+
+        return zipData;
+    }
+
+    public static toStream(file: File, prettify?: boolean | PrettifyType): Stream {
+        const zip = this.compiler.compile(file, prettify);
+        const zipData = zip.generateNodeStream({
+            type: "nodebuffer",
+            streamFiles: true,
             mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
             compression: "DEFLATE",
         });

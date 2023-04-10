@@ -21,7 +21,7 @@
 //         <xsd:element name="tblDescription" type="CT_String" minOccurs="0" maxOccurs="1"/>
 //     </xsd:sequence>
 // </xsd:complexType>
-import { IgnoreIfEmptyXmlComponent, OnOffElement, StringValueElement } from "file/xml-components";
+import { IgnoreIfEmptyXmlComponent, OnOffElement, StringValueElement } from "@file/xml-components";
 
 import { Alignment, AlignmentType } from "../../paragraph";
 import { IShadingAttributesProperties, Shading } from "../../shading";
@@ -45,7 +45,7 @@ export interface ITablePropertiesOptions {
 }
 
 export class TableProperties extends IgnoreIfEmptyXmlComponent {
-    constructor(options: ITablePropertiesOptions) {
+    public constructor(options: ITablePropertiesOptions) {
         super("w:tblPr");
 
         if (options.style) {

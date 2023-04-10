@@ -1,4 +1,4 @@
-import { XmlAttributeComponent, XmlComponent } from "file/xml-components";
+import { XmlAttributeComponent, XmlComponent } from "@file/xml-components";
 
 class SymbolAttributes extends XmlAttributeComponent<{
     readonly char: string;
@@ -11,7 +11,7 @@ class SymbolAttributes extends XmlAttributeComponent<{
 }
 
 export class Symbol extends XmlComponent {
-    constructor(char: string = "", symbolfont: string = "Wingdings") {
+    public constructor(char: string = "", symbolfont: string = "Wingdings") {
         super("w:sym");
         this.root.push(new SymbolAttributes({ char: char, symbolfont: symbolfont }));
     }

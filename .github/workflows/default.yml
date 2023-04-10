@@ -15,7 +15,7 @@ jobs:
             - name: Checkout Repo
               uses: actions/checkout@master
             - name: Install Dependencies
-              run: npm ci
+              run: npm ci --force
             - name: Build
               run: npm run build
             - name: Archive Production Artifact
@@ -30,11 +30,11 @@ jobs:
             - name: Checkout Repo
               uses: actions/checkout@master
             - name: Install Dependencies
-              run: npm ci
+              run: npm ci --force
             - name: Test
               run: npm run test.coverage
             - name: Codecov
-              uses: codecov/codecov-action@v1
+              uses: codecov/codecov-action@v3
               with:
                   fail_ci_if_error: true
                   verbose: true
@@ -45,7 +45,7 @@ jobs:
             - name: Checkout Repo
               uses: actions/checkout@master
             - name: Install Dependencies
-              run: npm ci
+              run: npm ci --force
             - name: Lint
               run: npm run lint
     prettier:
@@ -55,6 +55,16 @@ jobs:
             - name: Checkout Repo
               uses: actions/checkout@master
             - name: Install Dependencies
-              run: npm ci
+              run: npm ci --force
             - name: Prettier
               run: npm run style
+    cspell:
+        name: CSpell
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout Repo
+              uses: actions/checkout@master
+            - name: Install Dependencies
+              run: npm ci --force
+            - name: Prettier
+              run: npm run cspell

@@ -1,4 +1,4 @@
-import { XmlAttributeComponent, XmlComponent } from "file/xml-components";
+import { XmlAttributeComponent, XmlComponent } from "@file/xml-components";
 
 enum FieldCharacterType {
     BEGIN = "begin",
@@ -11,21 +11,21 @@ class FidCharAttrs extends XmlAttributeComponent<{ readonly type: FieldCharacter
 }
 
 export class Begin extends XmlComponent {
-    constructor(dirty?: boolean) {
+    public constructor(dirty?: boolean) {
         super("w:fldChar");
         this.root.push(new FidCharAttrs({ type: FieldCharacterType.BEGIN, dirty }));
     }
 }
 
 export class Separate extends XmlComponent {
-    constructor(dirty?: boolean) {
+    public constructor(dirty?: boolean) {
         super("w:fldChar");
         this.root.push(new FidCharAttrs({ type: FieldCharacterType.SEPARATE, dirty }));
     }
 }
 
 export class End extends XmlComponent {
-    constructor(dirty?: boolean) {
+    public constructor(dirty?: boolean) {
         super("w:fldChar");
         this.root.push(new FidCharAttrs({ type: FieldCharacterType.END, dirty }));
     }

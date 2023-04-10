@@ -1,13 +1,11 @@
-import { SpaceType } from "file/space-type";
-import { XmlAttributeComponent, XmlComponent } from "file/xml-components";
+import { SpaceType } from "@file/shared";
+import { XmlComponent } from "@file/xml-components";
+
+import { TextAttributes } from "../run/text-attributes";
 import { IPageReferenceOptions } from "./pageref-properties";
 
-class TextAttributes extends XmlAttributeComponent<{ readonly space: SpaceType }> {
-    protected readonly xmlKeys = { space: "xml:space" };
-}
-
 export class PageReferenceFieldInstruction extends XmlComponent {
-    constructor(bookmarkId: string, options: IPageReferenceOptions = {}) {
+    public constructor(bookmarkId: string, options: IPageReferenceOptions = {}) {
         super("w:instrText");
         this.root.push(new TextAttributes({ space: SpaceType.PRESERVE }));
 

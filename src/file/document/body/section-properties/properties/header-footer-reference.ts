@@ -1,4 +1,4 @@
-import { XmlAttributeComponent, XmlComponent } from "file/xml-components";
+import { XmlAttributeComponent, XmlComponent } from "@file/xml-components";
 
 // <xsd:simpleType name="ST_HdrFtr">
 // <xsd:restriction base="xsd:string">
@@ -52,7 +52,7 @@ export enum HeaderFooterType {
     FOOTER = "w:footerReference",
 }
 export class HeaderFooterReference extends XmlComponent {
-    constructor(type: HeaderFooterType, options: IHeaderFooterOptions) {
+    public constructor(type: HeaderFooterType, options: IHeaderFooterOptions) {
         super(type);
 
         this.root.push(

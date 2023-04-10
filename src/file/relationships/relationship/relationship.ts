@@ -1,4 +1,4 @@
-import { XmlComponent } from "file/xml-components";
+import { XmlComponent } from "@file/xml-components";
 import { RelationshipAttributes } from "./relationship-attributes";
 
 export type RelationshipType =
@@ -16,14 +16,15 @@ export type RelationshipType =
     | "http://schemas.openxmlformats.org/officeDocument/2006/relationships/custom-properties"
     | "http://schemas.openxmlformats.org/officeDocument/2006/relationships/extended-properties"
     | "http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink"
-    | "http://schemas.openxmlformats.org/officeDocument/2006/relationships/footnotes";
+    | "http://schemas.openxmlformats.org/officeDocument/2006/relationships/footnotes"
+    | "http://schemas.openxmlformats.org/officeDocument/2006/relationships/comments";
 
 export enum TargetModeType {
     EXTERNAL = "External",
 }
 
 export class Relationship extends XmlComponent {
-    constructor(id: string, type: RelationshipType, target: string, targetMode?: TargetModeType) {
+    public constructor(id: string, type: RelationshipType, target: string, targetMode?: TargetModeType) {
         super("Relationship");
 
         this.root.push(

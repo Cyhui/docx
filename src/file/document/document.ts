@@ -1,5 +1,5 @@
 // http://officeopenxml.com/WPdocument.php
-import { XmlComponent } from "file/xml-components";
+import { XmlComponent } from "@file/xml-components";
 import { ConcreteHyperlink, Paragraph } from "../paragraph";
 import { Table } from "../table";
 import { TableOfContents } from "../table-of-contents";
@@ -8,7 +8,7 @@ import { DocumentAttributes } from "./document-attributes";
 import { DocumentBackground, IDocumentBackgroundOptions } from "./document-background";
 
 export interface IDocumentOptions {
-    readonly background: IDocumentBackgroundOptions;
+    readonly background?: IDocumentBackgroundOptions;
 }
 
 // <xsd:element name="document" type="CT_Document"/>
@@ -33,7 +33,7 @@ export interface IDocumentOptions {
 export class Document extends XmlComponent {
     private readonly body: Body;
 
-    constructor(options: IDocumentOptions) {
+    public constructor(options: IDocumentOptions) {
         super("w:document");
         this.root.push(
             new DocumentAttributes({
@@ -53,11 +53,29 @@ export class Document extends XmlComponent {
                 wpi: "http://schemas.microsoft.com/office/word/2010/wordprocessingInk",
                 wne: "http://schemas.microsoft.com/office/word/2006/wordml",
                 wps: "http://schemas.microsoft.com/office/word/2010/wordprocessingShape",
+                cx: "http://schemas.microsoft.com/office/drawing/2014/chartex",
+                cx1: "http://schemas.microsoft.com/office/drawing/2015/9/8/chartex",
+                cx2: "http://schemas.microsoft.com/office/drawing/2015/10/21/chartex",
+                cx3: "http://schemas.microsoft.com/office/drawing/2016/5/9/chartex",
+                cx4: "http://schemas.microsoft.com/office/drawing/2016/5/10/chartex",
+                cx5: "http://schemas.microsoft.com/office/drawing/2016/5/11/chartex",
+                cx6: "http://schemas.microsoft.com/office/drawing/2016/5/12/chartex",
+                cx7: "http://schemas.microsoft.com/office/drawing/2016/5/13/chartex",
+                cx8: "http://schemas.microsoft.com/office/drawing/2016/5/14/chartex",
+                aink: "http://schemas.microsoft.com/office/drawing/2016/ink",
+                am3d: "http://schemas.microsoft.com/office/drawing/2017/model3d",
+                w16cex: "http://schemas.microsoft.com/office/word/2018/wordml/cex",
+                w16cid: "http://schemas.microsoft.com/office/word/2016/wordml/cid",
+                w16: "http://schemas.microsoft.com/office/word/2018/wordml",
+                w16sdtdh: "http://schemas.microsoft.com/office/word/2020/wordml/sdtdatahash",
+                w16se: "http://schemas.microsoft.com/office/word/2015/wordml/symex",
                 Ignorable: "w14 w15 wp14",
             }),
         );
         this.body = new Body();
-        this.root.push(new DocumentBackground(options.background));
+        if (options.background) {
+            this.root.push(new DocumentBackground(options.background));
+        }
         this.root.push(this.body);
     }
 

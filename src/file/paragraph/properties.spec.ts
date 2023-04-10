@@ -1,6 +1,6 @@
 import { expect } from "chai";
 
-import { Formatter } from "export/formatter";
+import { Formatter } from "@export/formatter";
 import { DocumentWrapper } from "../document-wrapper";
 import { File } from "../file";
 
@@ -26,13 +26,12 @@ describe("ParagraphProperties", () => {
                 // tslint:disable-next-line: no-object-literal-type-assertion
                 file: {
                     Numbering: {
-                        createConcreteNumberingInstance: (_: string, __: number) => {
-                            return;
-                        },
+                        createConcreteNumberingInstance: (_: string, __: number) => undefined,
                     },
                 } as File,
                 // tslint:disable-next-line: no-object-literal-type-assertion
                 viewWrapper: new DocumentWrapper({ background: {} }),
+                stack: [],
             });
 
             expect(tree).to.deep.equal({
@@ -121,6 +120,40 @@ describe("ParagraphProperties", () => {
                 "w:pPr": [
                     {
                         "w:suppressLineNumbers": {},
+                    },
+                ],
+            });
+        });
+
+        it("should create with the autoSpaceEastAsianText property", () => {
+            const properties = new ParagraphProperties({
+                autoSpaceEastAsianText: true,
+            });
+            const tree = new Formatter().format(properties);
+
+            expect(tree).to.deep.equal({
+                "w:pPr": [
+                    {
+                        "w:autoSpaceDN": {},
+                    },
+                ],
+            });
+        });
+
+        it("should create with the wordWrap property", () => {
+            const properties = new ParagraphProperties({
+                wordWrap: true,
+            });
+            const tree = new Formatter().format(properties);
+
+            expect(tree).to.deep.equal({
+                "w:pPr": [
+                    {
+                        "w:wordWrap": {
+                            _attr: {
+                                "w:val": 0,
+                            },
+                        },
                     },
                 ],
             });
